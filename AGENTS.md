@@ -12,9 +12,9 @@ A Quickshell status bar for Hyprland (Wayland). No build system, no tests.
 - `bar/BarContent.qml` — status bar layout (RowLayout; receives data via `barTheme`, `barStats`, `trayWin` properties; delegates to `bar/sections/`)
 - `bar/sections/` — individual bar section components (AvatarSection, WorkspaceBar, SectionDivider, LayoutLabel, WindowTitle, KernelStat, CpuStat, MemStat, DiskStat, NetStat, VolStat, GpuStat, ClockWidget, TrayWidget, PowerButton)
 - `PowerMenu.qml` — standalone floating shutdown menu (Lock/Reboot/Shutdown; run via `quickshell --config powermenu/` or Hyprland keybind)
-- `powermenu/shell.qml` — symlink to `../PowerMenu.qml` (required because quickshell only accepts directories as config paths)
-- `SysInfo.qml` — standalone floating system info overlay (parses `fastfetch --pipe` output)
-- `sysinfo/shell.qml` — symlink to `../SysInfo.qml`
+- `powermenu/shell.qml` — shutdown menu entrypoint
+- `SysInfo.qml` — standalone floating system info overlay (parses system info)
+- `sysinfo/shell.qml` — system info entrypoint
 - `icons/` — PNG assets
 
 Modularity is expected to grow; additional `.qml` files or subdirectories may appear without changing the run command.
@@ -50,7 +50,7 @@ quickshell --config bar/
 ## Gotchas
 
 - **Property name collision:** BarContent properties are named `barTheme`/`barStats`/`trayWin` to avoid binding loops when ids `theme`/`stats`/`win` exist in the parent scope. Section components receive them as `sectionTheme`/`sectionStats`/`sectionWin` for the same reason.
-- **Hardcoded user path** at `bar/BarContent.qml`: `source: "file:///home/syaofox/.config/quickshell/icons/syaofox.png"` — will fail on any other system. Should be made relative or configurable.
+- **Hardcoded user path** at `bar/BarContent.qml` and `sysinfo/shell.qml`: `source: "file:///home/syaofox/.config/quickshell/icons/syaofox.png"` — will fail on any other system. Should be made relative or configurable.
 - No `.gitignore` exists — build artifacts or local config could be accidentally committed.
 - CPU stat parsing relies on `/proc/stat` line order (`head -1`); unusual kernel configs could produce different column layouts.
 - Volume queries `@DEFAULT_AUDIO_SINK@` only — no microphone/input monitoring.

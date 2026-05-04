@@ -33,62 +33,26 @@ ShellRoot {
         }
 
         Process {
-            command: ["sh", "-c", "hostnamectl | grep 'Operating System' | cut -d: -f2- | sed 's/^ //'"]
-            stdout: SplitParser { onRead: d => { if (d) win.addItem("OS", d.trim()) } }
-            Component.onCompleted: running = true
-        }
-
-        Process {
-            command: ["sh", "-c", "hostnamectl | grep 'Hardware Vendor' | cut -d: -f2- | sed 's/^ //'"]
-            stdout: SplitParser { onRead: d => { if (d) win.addItem("Host", d.trim()) } }
-            Component.onCompleted: running = true
-        }
-
-        Process {
-            command: ["uname", "-r"]
-            stdout: SplitParser { onRead: d => { if (d) win.addItem("Kernel", d.trim()) } }
-            Component.onCompleted: running = true
-        }
-
-        Process {
-            command: ["sh", "-c", "uptime -p | sed 's/^up //'"]
-            stdout: SplitParser { onRead: d => { if (d) win.addItem("Uptime", d.trim()) } }
-            Component.onCompleted: running = true
-        }
-
-        Process {
-            command: ["sh", "-c", "pacman -Q 2>/dev/null | wc -l"]
-            stdout: SplitParser { onRead: d => { if (d) win.addItem("Packages", d.trim() + " (pacman)") } }
-            Component.onCompleted: running = true
-        }
-
-        Process {
-            command: ["sh", "-c", "basename $SHELL"]
-            stdout: SplitParser { onRead: d => { if (d) win.addItem("Shell", d.trim()) } }
-            Component.onCompleted: running = true
-        }
-
-        Process {
-            command: ["sh", "-c", "head -n 1 /proc/cpuinfo | cut -d: -f2- | sed 's/^ //'"]
-            stdout: SplitParser { onRead: d => { if (d) win.addItem("CPU", d.trim().replace(/\s+/g, ' ')) } }
-            Component.onCompleted: running = true
-        }
-
-        Process {
-            command: ["sh", "-c", "free -h | grep Mem | awk '{print $3\"/\"$2}'"]
-            stdout: SplitParser { onRead: d => { if (d) win.addItem("Memory", d.trim()) } }
-            Component.onCompleted: running = true
-        }
-
-        Process {
-            command: ["sh", "-c", "df -h / | tail -1 | awk '{print $3\"/\"$2\" (\"$5\")\"}'"]
-            stdout: SplitParser { onRead: d => { if (d) win.addItem("Disk", d.trim()) } }
-            Component.onCompleted: running = true
-        }
-
-        Process {
-            command: ["sh", "-c", "hostname -I 2>/dev/null | awk '{print $1}'"]
-            stdout: SplitParser { onRead: d => { if (d) win.addItem("IP", d.trim()) } }
+            command: ["sh", "-c", "fastfetch --json --structure \"OS:Host:Kernel:Uptime:Packages:Shell:CPU:Memory:Disk:LocalIp\" 2>/dev/null | jq -r '
+  def gb: . / 1073741824 * 100 | floor / 100;
+  (.[] | select(.type == \"OS\")        | \"OS|\\(.result.prettyName)\"),
+  (.[] | select(.type == \"Host\")      | \"Host|\\(.result.vendor) \\(.result.name)\"),
+  (.[] | select(.type == \"Kernel\")    | \"Kernel|\\(.result.release)\"),
+  (.[] | select(.type == \"Uptime\")    | \"Uptime|\\(.result.uptime / 86400 | floor) days, \\(.result.uptime % 86400 / 3600 | floor) hours, \\(.result.uptime % 3600 / 60 | floor) mins\"),
+  (.[] | select(.type == \"Packages\")  | \"Packages|\\(.result.pacman) (pacman)\"),
+  (.[] | select(.type == \"Shell\")     | \"Shell|\\(.result.prettyName)\"),
+  (.[] | select(.type == \"CPU\")       | \"CPU|\\(.result.cpu)\"),
+  (.[] | select(.type == \"Memory\")    | \"Memory|\\(.result.used | gb) GiB / \\(.result.total | gb) GiB\"),
+  (.[] | select(.type == \"Disk\")      | select(.result[0].mountpoint == \"/\") | \"Disk|\\(.result[0].bytes.used | gb) GiB / \\(.result[0].bytes.total | gb) GiB (\\((.result[0].bytes.used / .result[0].bytes.total * 100 | floor))%)\"),
+  (.[] | select(.type == \"LocalIp\")   | select(.result[0].defaultRoute.ipv4) | \"IP|\\(.result[0].ipv4[0:-3])\")
+'"]
+            stdout: SplitParser {
+                onRead: d => {
+                    var idx = d.indexOf("|")
+                    if (idx < 0) return
+                    win.addItem(d.substring(0, idx), d.substring(idx + 1))
+                }
+            }
             Component.onCompleted: running = true
         }
 
@@ -103,7 +67,7 @@ ShellRoot {
 
             Rectangle {
                 anchors.centerIn: parent
-                width: 460
+                width: 580
                 implicitHeight: infoRow.childrenRect.height + 48
                 color: theme.colBg
                 radius: 12

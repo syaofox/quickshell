@@ -22,6 +22,9 @@ ShellRoot {
     property string fontFamily: "JetBrainsMono Nerd Font"
     property int fontSize: 14
 
+    // Icon
+    property int iconMargin: 4
+
     // System info properties
     property string kernelVersion: "Linux"
     property int cpuUsage: 0
@@ -227,7 +230,10 @@ ShellRoot {
                         color: "transparent"
 
                         Image {
-                            anchors.fill: parent
+                            anchors {
+                                fill: parent
+                                margins: root.iconMargin
+                            }
                             source: "file:///home/syaofox/.config/quickshell/icons/syaofox.png"
                             fillMode: Image.PreserveAspectFit
                         }

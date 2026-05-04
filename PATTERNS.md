@@ -27,13 +27,36 @@ BarContent {
 }
 ```
 
-BarContent 内用 `barTheme.colFg` / `barStats.cpuUsage` 访问数据。
+BarContent 内用 `barTheme.colFg` / `barStats.cpuUsage` 访问数据，再通过 `sectionTheme`/`sectionStats` 传递给子 section 组件。
+
+## 模块拆分（bar/sections/）
+每个 bar 栏目拆分为独立 `.qml` 文件放在 `bar/sections/` 下，BarContent 用目录导入引用：
+
+```qml
+import "sections" as Sections
+
+Sections.CpuStat { sectionTheme: barTheme; sectionStats: barStats }
+```
+
+Section 组件统一接收 `sectionTheme`（Theme 对象）和 `sectionStats`（Stats 对象），各自渲染独立内容。
 
 ### 属性命名约定
 传递给子组件（跨文件）的属性必须加前缀避免与父作用域 id 冲突：
 - `barTheme` ← 不要用 `theme`（与 Theme id 冲突）
 - `barStats` ← 不要用 `stats`
 - `trayWin`  ← 不要用 `win`
+
+Section 组件接收属性时也需重命名防冲突：
+```qml
+// BarContent.qml — 传递时保持不同名
+Sections.CpuStat { sectionTheme: barTheme; sectionStats: barStats }
+
+// CpuStat.qml — 接收时也不同名
+property QtObject sectionTheme
+property QtObject sectionStats
+text: "CPU: " + sectionStats.cpuUsage + "%"
+color: sectionTheme.colYellow
+```
 
 ---
 

@@ -9,7 +9,7 @@ Rectangle {
     Layout.preferredHeight: 24
     color: "transparent"
     Layout.leftMargin: 8
-    Layout.rightMargin: 8
+    Layout.rightMargin: 0
 
     Text {
         anchors.centerIn: parent

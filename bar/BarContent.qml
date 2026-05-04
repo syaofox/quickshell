@@ -22,16 +22,17 @@ RowLayout {
     Sections.SectionDivider { sectionTheme: barTheme; marginLeft: 2; marginRight: 8 }
     Sections.WindowTitle { sectionTheme: barTheme; sectionStats: barStats }
 
-    Sections.KernelStat { sectionTheme: barTheme; sectionStats: barStats }
+    // Sections.KernelStat { sectionTheme: barTheme; sectionStats: barStats }
+    // Sections.SectionDivider { sectionTheme: barTheme }
+    Sections.NetStat { sectionTheme: barTheme; sectionStats: barStats }
     Sections.SectionDivider { sectionTheme: barTheme }
     Sections.CpuStat { sectionTheme: barTheme; sectionStats: barStats }
     Sections.SectionDivider { sectionTheme: barTheme }
     Sections.MemStat { sectionTheme: barTheme; sectionStats: barStats }
     Sections.SectionDivider { sectionTheme: barTheme }
-    Sections.DiskStat { sectionTheme: barTheme; sectionStats: barStats }
-    Sections.SectionDivider { sectionTheme: barTheme }
-    Sections.NetStat { sectionTheme: barTheme; sectionStats: barStats }
-    Sections.SectionDivider { sectionTheme: barTheme }
+    // Sections.DiskStat { sectionTheme: barTheme; sectionStats: barStats }
+    // Sections.SectionDivider { sectionTheme: barTheme }
+   
     Sections.VolStat { sectionTheme: barTheme; sectionStats: barStats }
     Sections.SectionDivider { sectionTheme: barTheme }
     Sections.GpuStat { sectionTheme: barTheme; sectionStats: barStats }
@@ -40,7 +41,7 @@ RowLayout {
     Sections.SectionDivider { sectionTheme: barTheme }
 
     Sections.TrayWidget { sectionTheme: barTheme; sectionWin: trayWin; trayFontSize: 12 }
-    Sections.SectionDivider { sectionTheme: barTheme; marginRight: 0 }
+    // Sections.SectionDivider { sectionTheme: barTheme; marginRight: 0 }
     Sections.PowerButton { sectionTheme: barTheme }
 
     Item { width: 8 }

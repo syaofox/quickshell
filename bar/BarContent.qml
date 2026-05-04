@@ -34,6 +34,8 @@ RowLayout {
     Sections.SectionDivider { sectionTheme: barTheme }
     Sections.VolStat { sectionTheme: barTheme; sectionStats: barStats }
     Sections.SectionDivider { sectionTheme: barTheme }
+    Sections.GpuStat { sectionTheme: barTheme; sectionStats: barStats }
+    Sections.SectionDivider { sectionTheme: barTheme }
     Sections.ClockWidget { sectionTheme: barTheme }
     Sections.SectionDivider { sectionTheme: barTheme }
 

@@ -10,7 +10,7 @@ A Quickshell status bar for Hyprland (Wayland). No build system, no tests.
 - `bar/Theme.qml` — color/font constants (QtObject)
 - `bar/StatsProvider.qml` — system monitoring (Item container holding Process + Timer + Connections; not QtObject — QtObject cannot host those child types)
 - `bar/BarContent.qml` — status bar layout (RowLayout; receives data via `barTheme`, `barStats`, `trayWin` properties; delegates to `bar/sections/`)
-- `bar/sections/` — individual bar section components (AvatarSection, WorkspaceBar, SectionDivider, LayoutLabel, WindowTitle, KernelStat, CpuStat, MemStat, DiskStat, NetStat, VolStat, ClockWidget, TrayWidget, PowerButton)
+- `bar/sections/` — individual bar section components (AvatarSection, WorkspaceBar, SectionDivider, LayoutLabel, WindowTitle, KernelStat, CpuStat, MemStat, DiskStat, NetStat, VolStat, GpuStat, ClockWidget, TrayWidget, PowerButton)
 - `PowerMenu.qml` — standalone floating shutdown menu (Lock/Reboot/Shutdown; run via `quickshell --config powermenu/` or Hyprland keybind)
 - `powermenu/shell.qml` — symlink to `../PowerMenu.qml` (required because quickshell only accepts directories as config paths)
 - `SysInfo.qml` — standalone floating system info overlay (parses `fastfetch --pipe` output)

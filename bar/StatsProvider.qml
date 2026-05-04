@@ -15,6 +15,9 @@ Item {
     property string currentLayout: "Tile"
     property string netDown: "0.00"
     property string netUp: "0.00"
+    property int gpuUsage: -1
+    property int gpuMemUsed: 0
+    property int gpuMemTotal: 0
 
     property var lastCpuIdle: 0
     property var lastCpuTotal: 0
@@ -126,6 +129,24 @@ Item {
         Component.onCompleted: running = true
     }
 
+    // GPU usage (NVIDIA)
+    Process {
+        id: gpuProc
+        command: ["sh", "-c", "nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null"]
+        stdout: SplitParser {
+            onRead: data => {
+                if (!data) return
+                var parts = data.trim().split(/,\s*/)
+                if (parts.length >= 3) {
+                    gpuUsage = parseInt(parts[0]) || 0
+                    gpuMemUsed = parseInt(parts[1]) || 0
+                    gpuMemTotal = parseInt(parts[2]) || 0
+                }
+            }
+        }
+        Component.onCompleted: running = true
+    }
+
     Process {
         id: volProc
         command: ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]
@@ -177,6 +198,7 @@ Item {
             diskProc.running = true
             volProc.running = true
             netProc.running = true
+            gpuProc.running = true
         }
     }
 

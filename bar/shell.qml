@@ -7,7 +7,6 @@ import QtQuick
 ShellRoot {
     Theme { id: theme }
     StatsProvider { id: stats }
-
     Variants {
         model: Quickshell.screens
 

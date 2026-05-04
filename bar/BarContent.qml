@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Services.SystemTray
 
@@ -30,6 +31,11 @@ RowLayout {
             }
             source: "file:///home/syaofox/.config/quickshell/icons/syaofox.png"
             fillMode: Image.PreserveAspectFit
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: Quickshell.execDetached(["quickshell", "--config", Quickshell.shellPath("../powermenu")])
         }
     }
 

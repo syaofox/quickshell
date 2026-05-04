@@ -21,7 +21,7 @@ ShellRoot {
         WlrLayershell.layer: WlrLayer.Overlay
 
         function run(cmd) {
-            Quickshell.execDetached({ command: cmd.split(" ") })
+            Quickshell.execDetached(cmd.split(" "))
             Qt.callLater(Qt.quit)
         }
 

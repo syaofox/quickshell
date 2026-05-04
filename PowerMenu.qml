@@ -32,8 +32,8 @@ ShellRoot {
         }
 
         function run(cmd) {
-            Qt.quit()
             cmdRunner.createObject(win, { command: cmd.split(" ") })
+            Qt.callLater(Qt.quit)
         }
 
         Rectangle {

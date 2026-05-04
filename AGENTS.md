@@ -56,6 +56,10 @@ quickshell --config bar/
 
 Do not look for or expect any of these. The project has none.
 
+## Skill / Pattern Reference
+
+`PATTERNS.md` — established project conventions for components, windows, monitoring, system tray, process execution, and property passing. Check this first before implementing new features.
+
 ## Reference
 
 - Quickshell types: https://quickshell.org/docs/v0.3.0/types/

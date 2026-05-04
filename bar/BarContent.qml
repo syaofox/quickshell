@@ -35,7 +35,7 @@ RowLayout {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: Quickshell.execDetached(["sh", "-c", "pgrep -f 'quickshell.*powermenu' | grep -v $$ > /dev/null || quickshell --config " + Quickshell.shellPath("../powermenu")])
+            onClicked: Quickshell.execDetached(["sh", "-c", "pgrep -f 'quickshell.*sysinfo' | grep -v $$ > /dev/null || quickshell --config " + Quickshell.shellPath("../sysinfo")])
         }
     }
 
@@ -297,6 +297,36 @@ RowLayout {
                     }
                 }
             }
+        }
+    }
+
+    Rectangle {
+        Layout.preferredWidth: 1
+        Layout.preferredHeight: 16
+        Layout.alignment: Qt.AlignVCenter
+        color: barTheme.colMuted
+    }
+
+    Rectangle {
+        Layout.preferredWidth: 24
+        Layout.preferredHeight: 24
+        color: "transparent"
+        Layout.leftMargin: 8
+        Layout.rightMargin: 8
+
+        Text {
+            anchors.centerIn: parent
+            text: "\uf011"
+            font.family: barTheme.fontFamily
+            font.pixelSize: 14
+            color: powerBtn.containsMouse ? "#f7768e" : barTheme.colFg
+        }
+
+        MouseArea {
+            id: powerBtn
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: Quickshell.execDetached(["sh", "-c", "pgrep -f 'quickshell.*powermenu' | grep -v $$ > /dev/null || quickshell --config " + Quickshell.shellPath("../powermenu")])
         }
     }
 

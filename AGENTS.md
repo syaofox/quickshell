@@ -12,6 +12,8 @@ A Quickshell status bar for Hyprland (Wayland). No build system, no tests.
 - `bar/BarContent.qml` — status bar layout (RowLayout; receives data via `barTheme`, `barStats`, `trayWin` properties to avoid QML id collision)
 - `PowerMenu.qml` — standalone floating shutdown menu (Lock/Reboot/Shutdown; run via `quickshell --config powermenu/` or Hyprland keybind)
 - `powermenu/shell.qml` — symlink to `../PowerMenu.qml` (required because quickshell only accepts directories as config paths)
+- `SysInfo.qml` — standalone floating system info overlay (parses `fastfetch --pipe` output)
+- `sysinfo/shell.qml` — symlink to `../SysInfo.qml`
 - `icons/` — PNG assets
 
 Modularity is expected to grow; additional `.qml` files or subdirectories may appear without changing the run command.

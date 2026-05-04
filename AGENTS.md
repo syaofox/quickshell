@@ -7,7 +7,7 @@ A Quickshell status bar for Hyprland (Wayland). No build system, no tests.
 ## Current structure
 
 - `bar/shell.qml` — entrypoint (ShellRoot + PanelWindow per screen)
-- `bar/Theme.qml` — color/font constants (QtObject)
+- `Theme.qml` — unified color/font/theme constants (QtObject; shared by bar/, powermenu, sysinfo)
 - `bar/StatsProvider.qml` — system monitoring (Item container holding Process + Timer + Connections; not QtObject — QtObject cannot host those child types)
 - `bar/BarContent.qml` — status bar layout (RowLayout; receives data via `barTheme`, `barStats`, `trayWin` properties; delegates to `bar/sections/`)
 - `bar/sections/` — individual bar section components (AvatarSection, WorkspaceBar, SectionDivider, LayoutLabel, WindowTitle, KernelStat, CpuStat, MemStat, DiskStat, NetStat, VolStat, GpuStat, ClockWidget, TrayWidget, PowerButton)
@@ -31,7 +31,7 @@ quickshell --config bar/
 - `hyprctl` (part of Hyprland)
 - `wpctl` (part of PipeWire) — volume monitoring
 - `jq` — parsing hyprctl JSON output
-- JetBrainsMono Nerd Font — hardcoded in `bar/Theme.qml`
+- JetBrainsMono Nerd Font — hardcoded in `Theme.qml`
 
 ## Architecture
 

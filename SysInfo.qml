@@ -7,6 +7,8 @@ import QtQuick
 import QtQuick.Layouts
 
 ShellRoot {
+    Theme { id: theme }
+
     PanelWindow {
         id: win
         visible: true
@@ -92,7 +94,7 @@ ShellRoot {
 
         Rectangle {
             anchors.fill: parent
-            color: "#80000000"
+            color: theme.colOverlay
 
             MouseArea {
                 anchors.fill: parent
@@ -103,9 +105,9 @@ ShellRoot {
                 anchors.centerIn: parent
                 width: 460
                 implicitHeight: infoRow.childrenRect.height + 48
-                color: "#1a1b26"
+                color: theme.colBg
                 radius: 12
-                border.color: "#444b6a"
+                border.color: theme.colMuted
                 border.width: 1
 
                 MouseArea {
@@ -146,9 +148,9 @@ ShellRoot {
                             active: win.sysInfoItems.length === 0
                             sourceComponent: Text {
                                 text: "Fetching system info..."
-                                font.family: "JetBrainsMono Nerd Font"
-                                font.pixelSize: 13
-                                color: "#444b6a"
+                                font.family: theme.fontFamily
+                                font.pixelSize: theme.fontSize
+                                color: theme.colMuted
                                 Layout.alignment: Qt.AlignHCenter
                             }
                         }
@@ -167,18 +169,18 @@ ShellRoot {
 
                                     Text {
                                         text: modelData.key + ":"
-                                        font.family: "JetBrainsMono Nerd Font"
-                                        font.pixelSize: 13
-                                        color: "#7aa2f7"
+                                        font.family: theme.fontFamily
+                                        font.pixelSize: theme.fontSize
+                                        color: theme.colBlue
                                         font.bold: true
                                         Layout.alignment: Qt.AlignVCenter
                                     }
 
                                     Text {
                                         text: modelData.value
-                                        font.family: "JetBrainsMono Nerd Font"
-                                        font.pixelSize: 13
-                                        color: "#a9b1d6"
+                                        font.family: theme.fontFamily
+                                        font.pixelSize: theme.fontSize
+                                        color: theme.colFg
                                         Layout.fillWidth: true
                                         elide: Text.ElideRight
                                         Layout.alignment: Qt.AlignVCenter

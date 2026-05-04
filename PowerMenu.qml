@@ -6,6 +6,8 @@ import QtQuick
 import QtQuick.Layouts
 
 ShellRoot {
+    Theme { id: theme }
+
     PanelWindow {
         id: win
         visible: true
@@ -73,7 +75,7 @@ ShellRoot {
 
         Rectangle {
             anchors.fill: parent
-            color: "#80000000"
+            color: theme.colOverlay
 
             MouseArea {
                 anchors.fill: parent
@@ -87,9 +89,9 @@ ShellRoot {
                 anchors.centerIn: parent
                 width: 260
                 height: 300
-                color: "#1a1b26"
+                color: theme.colBg
                 radius: 12
-                border.color: "#444b6a"
+                border.color: theme.colMuted
                 border.width: 1
 
                 MouseArea {
@@ -111,7 +113,7 @@ ShellRoot {
                             property bool isPending: win.pendingIndex === index
                             property bool isHovered: mouseArea.containsMouse
 
-                            color: isPending ? "#e0af68" : (isHovered ? "#3a3b4e" : "#2a2b3e")
+                            color: isPending ? theme.colYellow : (isHovered ? theme.colBtnHover : theme.colBtn)
                             Behavior on color { ColorAnimation { duration: 100 } }
 
                             RowLayout {
@@ -122,18 +124,18 @@ ShellRoot {
 
                                 Text {
                                     text: modelData.icon
-                                    font.family: "JetBrainsMono Nerd Font"
+                                    font.family: theme.fontFamily
                                     font.pixelSize: 20
-                                    color: isPending ? "#1a1b26" : "#a9b1d6"
+                                    color: isPending ? theme.colBg : theme.colFg
                                 }
 
                                 Text {
                                     text: isPending && win.countdown > 0
                                         ? modelData.label + " (" + win.countdown + "s)"
                                         : modelData.label
-                                    font.family: "JetBrainsMono Nerd Font"
-                                    font.pixelSize: 14
-                                    color: isPending ? "#1a1b26" : "#a9b1d6"
+                                    font.family: theme.fontFamily
+                                    font.pixelSize: theme.fontSize
+                                    color: isPending ? theme.colBg : theme.colFg
                                     font.bold: true
                                 }
 
@@ -141,9 +143,9 @@ ShellRoot {
 
                                 Text {
                                     text: isPending ? "\uf28e" : "\u25b6"
-                                    font.family: "JetBrainsMono Nerd Font"
+                                    font.family: theme.fontFamily
                                     font.pixelSize: 12
-                                    color: isPending ? "#1a1b26" : "#444b6a"
+                                    color: isPending ? theme.colBg : theme.colMuted
                                 }
                             }
 
@@ -161,9 +163,9 @@ ShellRoot {
                     Text {
                         Layout.alignment: Qt.AlignHCenter
                         text: win.pendingIndex >= 0 ? "\uf28e 再点一次确认，按 ESC 取消" : ""
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: theme.fontFamily
                         font.pixelSize: 11
-                        color: "#e0af68"
+                        color: theme.colYellow
                     }
                 }
             }

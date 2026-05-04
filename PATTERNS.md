@@ -184,15 +184,9 @@ Quickshell.execDetached(["quickshell", "--config", Quickshell.shellPath("../subc
 
 ### 按钮执行命令（PowerMenu 模式）
 ```qml
-Component {
-    id: cmdRunner
-    Process {
-        Component.onCompleted: running = true
-    }
-}
-
 function run(cmd) {
-    cmdRunner.createObject(parent, { command: cmd.split(" ") })
+    Quickshell.execDetached({ command: cmd.split(" ") })
+    Qt.callLater(Qt.quit)  // 窗口退出前启动命令
 }
 ```
 

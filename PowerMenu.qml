@@ -1,7 +1,6 @@
 //@ pragma UseQApplication
 
 import Quickshell
-import Quickshell.Io
 import Quickshell.Wayland
 import QtQuick
 import QtQuick.Layouts
@@ -21,18 +20,8 @@ ShellRoot {
 
         WlrLayershell.layer: WlrLayer.Overlay
 
-        Component {
-            id: cmdRunner
-            Process {
-                Component.onCompleted: {
-                    running = true
-                    Qt.quit()
-                }
-            }
-        }
-
         function run(cmd) {
-            cmdRunner.createObject(win, { command: cmd.split(" ") })
+            Quickshell.execDetached({ command: cmd.split(" ") })
             Qt.callLater(Qt.quit)
         }
 
@@ -110,7 +99,7 @@ ShellRoot {
                                 hoverEnabled: true
                                 onEntered: parent.color = "#3a3b4e"
                                 onExited: parent.color = "#2a2b3e"
-                                onClicked: run(modelData.cmd)
+                                onClicked: win.run(modelData.cmd)
                             }
                         }
                     }

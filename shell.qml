@@ -21,6 +21,7 @@ ShellRoot {
     property color colRed: "#f7768e"
     property color colYellow: "#e0af68"
     property color colBlue: "#7aa2f7"
+    property color colGreen: "#9ece6a"
 
     // Font
     property string fontFamily: "JetBrainsMono Nerd Font"
@@ -41,6 +42,14 @@ ShellRoot {
     // CPU tracking
     property var lastCpuIdle: 0
     property var lastCpuTotal: 0
+
+    // Network speed
+    property var lastNetRx: 0
+    property var lastNetTx: 0
+    property var lastNetTime: 0
+    property real netThreshold: 0.01
+    property string netDown: "0.00"
+    property string netUp: "0.00"
 
     // Kernel version
     Process {
@@ -118,6 +127,38 @@ ShellRoot {
         Component.onCompleted: running = true
     }
 
+    // Network speed
+    Process {
+        id: netProc
+        command: ["sh", "-c", "awk 'NR>2 && $1!=\"lo:\"{print $2,$10;exit}' /proc/net/dev"]
+        stdout: SplitParser {
+            onRead: data => {
+                if (!data) return
+                var parts = data.trim().split(/\s+/)
+                if (parts.length < 2) return
+                var rx = parseInt(parts[0]) || 0
+                var tx = parseInt(parts[1]) || 0
+                var now = Date.now()
+
+                if (lastNetRx > 0 && lastNetTime > 0) {
+                    var dt = (now - lastNetTime) / 1000
+                    if (dt > 0) {
+                        var downMbps = ((rx - lastNetRx) * 8) / 1000000 / dt
+                        var upMbps = ((tx - lastNetTx) * 8) / 1000000 / dt
+                        if (downMbps >= netThreshold) netDown = downMbps.toFixed(2)
+                        else netDown = "0.00"
+                        if (upMbps >= netThreshold) netUp = upMbps.toFixed(2)
+                        else netUp = "0.00"
+                    }
+                }
+                lastNetRx = rx
+                lastNetTx = tx
+                lastNetTime = now
+            }
+        }
+        Component.onCompleted: running = true
+    }
+
     // Volume level (wpctl for PipeWire)
     Process {
         id: volProc
@@ -172,6 +213,7 @@ ShellRoot {
             memProc.running = true
             diskProc.running = true
             volProc.running = true
+            netProc.running = true
         }
     }
 
@@ -379,6 +421,24 @@ ShellRoot {
                     Text {
                         text: "Disk: " + diskUsage + "%"
                         color: root.colBlue
+                        font.pixelSize: root.fontSize
+                        font.family: root.fontFamily
+                        font.bold: true
+                        Layout.rightMargin: 8
+                    }
+
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 0
+                        Layout.rightMargin: 8
+                        color: root.colMuted
+                    }
+
+                    Text {
+                        text: "↓" + netDown + " ↑" + netUp
+                        color: root.colGreen
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true

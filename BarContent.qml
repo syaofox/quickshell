@@ -11,6 +11,11 @@ RowLayout {
     anchors.fill: parent
     spacing: 0
 
+    property int trayFontSize: 12
+    property var nerdfontMap: ({
+        "nm-applet": "\uf1eb",
+    })
+
     Item { width: 8 }
 
     Rectangle {
@@ -242,11 +247,14 @@ RowLayout {
 
     RowLayout {
         spacing: 0
+
         Repeater {
             model: SystemTray.items
             delegate: Item {
                 implicitWidth: 24
                 implicitHeight: 24
+
+                property string mappedIcon: nerdfontMap[model.modelData.id] || ""
 
                 Image {
                     anchors {
@@ -256,8 +264,18 @@ RowLayout {
                         leftMargin: 0
                         rightMargin: 0
                     }
+                    visible: !mappedIcon.length
                     source: model.modelData.icon
                     fillMode: Image.PreserveAspectFit
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    visible: mappedIcon.length
+                    text: mappedIcon
+                    font.family: barTheme.fontFamily
+                    font.pixelSize: trayFontSize
+                    color: barTheme.colFg
                 }
 
                 MouseArea {

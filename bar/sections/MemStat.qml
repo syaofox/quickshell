@@ -5,8 +5,8 @@ import QtQuick.Layouts
 Text {
     property QtObject sectionTheme
     property QtObject sectionStats
-    text: "Mem: " + sectionStats.memUsage + "%"
-    color: sectionTheme.colCyan
+    text: "Mem " + sectionStats.memUsage + "%"
+    color: sectionTheme.colYellow
     font.pixelSize: sectionTheme.fontSize
     font.family: sectionTheme.fontFamily
     font.bold: true

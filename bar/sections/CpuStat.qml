@@ -5,7 +5,7 @@ import QtQuick.Layouts
 Text {
     property QtObject sectionTheme
     property QtObject sectionStats
-    text: "CPU: " + sectionStats.cpuUsage + "%"
+    text: "CPU " + sectionStats.cpuUsage + "%"
     color: sectionTheme.colYellow
     font.pixelSize: sectionTheme.fontSize
     font.family: sectionTheme.fontFamily

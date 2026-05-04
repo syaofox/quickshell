@@ -6,7 +6,7 @@ Text {
     property QtObject sectionStats
 
     visible: sectionStats.gpuUsage >= 0
-    text: "GPU: " + sectionStats.gpuUsage + "% VRAM: " + sectionStats.gpuMemUsed + "/" + sectionStats.gpuMemTotal + "MiB"
+    text: "GPU " + sectionStats.gpuUsage + "% VRAM " + sectionStats.gpuMemUsed + "/" + sectionStats.gpuMemTotal + "MiB"
     color: sectionTheme.colGreen
     font.pixelSize: sectionTheme.fontSize
     font.family: sectionTheme.fontFamily

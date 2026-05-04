@@ -29,9 +29,10 @@ RowLayout {
     Sections.CpuStat { sectionTheme: barTheme; sectionStats: barStats }
     // Sections.SectionDivider { sectionTheme: barTheme }
     Sections.MemStat { sectionTheme: barTheme; sectionStats: barStats }
-    Sections.SectionDivider { sectionTheme: barTheme }
     Sections.GpuStat { sectionTheme: barTheme; sectionStats: barStats }
+
     Sections.SectionDivider { sectionTheme: barTheme }
+    // Sections.SectionDivider { sectionTheme: barTheme }
     // Sections.DiskStat { sectionTheme: barTheme; sectionStats: barStats }
     // Sections.SectionDivider { sectionTheme: barTheme }
    

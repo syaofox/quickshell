@@ -19,6 +19,7 @@ ShellRoot {
         }
 
         WlrLayershell.layer: WlrLayer.Overlay
+        WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
 
         property int pendingIndex: -1
         property int countdown: 0

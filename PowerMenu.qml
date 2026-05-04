@@ -2,23 +2,24 @@
 
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 import QtQuick
 import QtQuick.Layouts
 
 ShellRoot {
-    FloatingWindow {
+    PanelWindow {
         id: win
         visible: true
         color: "transparent"
 
-        Component.onCompleted: {
-            var s = Quickshell.screens[0]
-            if (s) {
-                x = 0; y = 0
-                width = s.width
-                height = s.height
-            }
+        anchors {
+            top: true
+            bottom: true
+            left: true
+            right: true
         }
+
+        WlrLayershell.layer: WlrLayer.Overlay
 
         Component {
             id: cmdRunner

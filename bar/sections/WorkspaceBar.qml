@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick
 import QtQuick.Layouts
 import Quickshell.Hyprland
 
@@ -38,7 +37,7 @@ RowLayout {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: Hyprland.dispatch("workspace " + (index + 1))
+                onClicked: Hyprland.dispatch("workspace name:" + (index + 1))
             }
         }
     }

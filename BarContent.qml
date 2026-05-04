@@ -241,7 +241,7 @@ RowLayout {
     }
 
     RowLayout {
-        spacing: 4
+        spacing: 0
         Repeater {
             model: SystemTray.items
             delegate: Item {
@@ -251,7 +251,10 @@ RowLayout {
                 Image {
                     anchors {
                         fill: parent
-                        margins: 4
+                        topMargin: 4
+                        bottomMargin: 4
+                        leftMargin: 0
+                        rightMargin: 0
                     }
                     source: model.modelData.icon
                     fillMode: Image.PreserveAspectFit

@@ -20,10 +20,55 @@ ShellRoot {
 
         WlrLayershell.layer: WlrLayer.Overlay
 
-        function run(cmd) {
-            Quickshell.execDetached(cmd.split(" "))
-            Qt.callLater(Qt.quit)
+        property int pendingIndex: -1
+        property int countdown: 0
+        property string pendingCmd: ""
+        readonly property int countdownTotal: 10
+
+        Timer {
+            id: countdownTimer
+            interval: 1000
+            repeat: true
+            onTriggered: {
+                win.countdown--
+                if (win.countdown <= 0) {
+                    countdownTimer.stop()
+                    Quickshell.execDetached(win.pendingCmd.split(" "))
+                    Qt.quit()
+                }
+            }
         }
+
+        function cancelPending() {
+            countdownTimer.stop()
+            pendingIndex = -1
+            countdown = 0
+            pendingCmd = ""
+        }
+
+        function handleAction(cmd, index) {
+            if (!win.menuItems[index].confirm) {
+                Quickshell.execDetached(cmd.split(" "))
+                Qt.quit()
+                return
+            }
+            if (pendingIndex === index) {
+                countdownTimer.stop()
+                Quickshell.execDetached(cmd.split(" "))
+                Qt.quit()
+            } else {
+                pendingIndex = index
+                pendingCmd = cmd
+                countdown = countdownTotal
+                countdownTimer.start()
+            }
+        }
+
+        property var menuItems: [
+            { label: "Lock",     icon: "\uf023", cmd: "hyprlock",           confirm: false },
+            { label: "Reboot",   icon: "\uf2f1", cmd: "systemctl reboot",   confirm: true  },
+            { label: "Shutdown", icon: "\uf011", cmd: "systemctl poweroff", confirm: true  },
+        ]
 
         Rectangle {
             anchors.fill: parent
@@ -31,7 +76,10 @@ ShellRoot {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: Qt.quit()
+                onClicked: {
+                    if (win.pendingIndex >= 0) win.cancelPending()
+                    else Qt.quit()
+                }
             }
 
             Rectangle {
@@ -52,17 +100,18 @@ ShellRoot {
                     spacing: 12
 
                     Repeater {
-                        model: [
-                            { label: "Lock",     icon: "\uf023", cmd: "hyprlock" },
-                            { label: "Reboot",   icon: "\uf2f1", cmd: "systemctl reboot" },
-                            { label: "Shutdown", icon: "\uf011", cmd: "systemctl poweroff" },
-                        ]
+                        model: win.menuItems
 
                         Rectangle {
                             Layout.preferredWidth: 180
                             Layout.preferredHeight: 44
-                            color: "#2a2b3e"
                             radius: 8
+
+                            property bool isPending: win.pendingIndex === index
+                            property bool isHovered: mouseArea.containsMouse
+
+                            color: isPending ? "#e0af68" : (isHovered ? "#3a3b4e" : "#2a2b3e")
+                            Behavior on color { ColorAnimation { duration: 100 } }
 
                             RowLayout {
                                 anchors.fill: parent
@@ -74,36 +123,56 @@ ShellRoot {
                                     text: modelData.icon
                                     font.family: "JetBrainsMono Nerd Font"
                                     font.pixelSize: 20
-                                    color: "#a9b1d6"
+                                    color: isPending ? "#1a1b26" : "#a9b1d6"
                                 }
 
                                 Text {
-                                    text: modelData.label
+                                    text: isPending && win.countdown > 0
+                                        ? modelData.label + " (" + win.countdown + "s)"
+                                        : modelData.label
                                     font.family: "JetBrainsMono Nerd Font"
                                     font.pixelSize: 14
-                                    color: "#a9b1d6"
+                                    color: isPending ? "#1a1b26" : "#a9b1d6"
                                     font.bold: true
                                 }
 
                                 Item { Layout.fillWidth: true }
 
                                 Text {
-                                    text: "\u25b6"
-                                    color: "#444b6a"
+                                    text: isPending ? "\uf28e" : "\u25b6"
+                                    font.family: "JetBrainsMono Nerd Font"
                                     font.pixelSize: 12
+                                    color: isPending ? "#1a1b26" : "#444b6a"
                                 }
                             }
 
                             MouseArea {
+                                id: mouseArea
                                 anchors.fill: parent
                                 hoverEnabled: true
-                                onEntered: parent.color = "#3a3b4e"
-                                onExited: parent.color = "#2a2b3e"
-                                onClicked: win.run(modelData.cmd)
+                                onClicked: win.handleAction(modelData.cmd, index)
                             }
                         }
                     }
+
+                    Item { width: 1; height: 4 }
+
+                    Text {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: win.pendingIndex >= 0 ? "\uf28e 再点一次确认，按 ESC 取消" : ""
+                        font.family: "JetBrainsMono Nerd Font"
+                        font.pixelSize: 11
+                        color: "#e0af68"
+                    }
                 }
+            }
+        }
+
+        Shortcut {
+            sequence: "Escape"
+            onActivated: {
+                if (win.pendingIndex >= 0) win.cancelPending()
+                else Qt.quit()
             }
         }
     }

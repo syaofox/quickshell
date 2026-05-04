@@ -34,6 +34,10 @@ quickshell shell.qml
 - **Layout detection:** derived from `hyprctl activewindow -j` (floating/fullscreen/tiled), not the actual Hyprland layout algorithm
 - **Adding modules:** create separate `.qml` component files and import them into `shell.qml` (standard QML import mechanics)
 
+## Pragmas
+
+- `//@ pragma UseQApplication` at `shell.qml:1` — required for platform menus (system tray right-click context menu). Without it, tray menus will error.
+
 ## Gotchas
 
 - **Hardcoded user path** at `shell.qml:231`: `source: "file:///home/syaofox/.config/quickshell/icons/syaofox.png"` — will fail on any other system. Should be made relative or configurable.

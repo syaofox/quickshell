@@ -1,8 +1,12 @@
+//@ pragma UseQApplication
+
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
 import Quickshell.Hyprland
+import Quickshell.Services.SystemTray
 import QtQuick
+import QtQuick.Window
 import QtQuick.Layouts
 
 ShellRoot {
@@ -195,6 +199,7 @@ ShellRoot {
         model: Quickshell.screens
 
         PanelWindow {
+            id: win
             property var modelData
             screen: modelData
 
@@ -421,6 +426,48 @@ ShellRoot {
                             running: true
                             repeat: true
                             onTriggered: clockText.text = Qt.formatDateTime(new Date(), "ddd, MMM dd - HH:mm")
+                        }
+                    }
+
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 0
+                        Layout.rightMargin: 8
+                        color: root.colMuted
+                    }
+
+                    RowLayout {
+                        spacing: 4
+                        Repeater {
+                            model: SystemTray.items
+                            delegate: Item {
+                                implicitWidth: 24
+                                implicitHeight: 24
+
+                                Image {
+                                    anchors {
+                                        fill: parent
+                                        margins: 4
+                                    }
+                                    source: model.modelData.icon
+                                    fillMode: Image.PreserveAspectFit
+                                }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                                        onClicked: (mouse) => {
+                                            if (mouse.button === Qt.LeftButton) {
+                                                model.modelData.activate()
+                                            } else if (mouse.button === Qt.RightButton && model.modelData.hasMenu) {
+                                                var pos = mapToItem(null, mouse.x, mouse.y)
+                                                model.modelData.display(win, pos.x, pos.y)
+                                            }
+                                        }
+                                    }
+                            }
                         }
                     }
 

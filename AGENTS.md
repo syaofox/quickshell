@@ -6,7 +6,10 @@ A Quickshell status bar for Hyprland (Wayland). No build system, no tests.
 
 ## Current structure
 
-- `shell.qml` — entrypoint and (so far) the only QML file
+- `shell.qml` — entrypoint (ShellRoot + PanelWindow per screen)
+- `Theme.qml` — color/font constants (QtObject)
+- `StatsProvider.qml` — system monitoring (Process + Timer + Connections)
+- `BarContent.qml` — status bar layout (RowLayout)
 - `icons/` — PNG assets
 
 Modularity is expected to grow; additional `.qml` files or subdirectories may appear without changing the run command.
@@ -23,7 +26,7 @@ quickshell shell.qml
 - `hyprctl` (part of Hyprland)
 - `wpctl` (part of PipeWire) — volume monitoring
 - `jq` — parsing hyprctl JSON output
-- JetBrainsMono Nerd Font — hardcoded in `shell.qml:22`
+- JetBrainsMono Nerd Font — hardcoded in `Theme.qml`
 
 ## Architecture
 
@@ -40,7 +43,7 @@ quickshell shell.qml
 
 ## Gotchas
 
-- **Hardcoded user path** at `shell.qml:231`: `source: "file:///home/syaofox/.config/quickshell/icons/syaofox.png"` — will fail on any other system. Should be made relative or configurable.
+- **Hardcoded user path** at `BarContent.qml` (formerly `shell.qml`): `source: "file:///home/syaofox/.config/quickshell/icons/syaofox.png"` — will fail on any other system. Should be made relative or configurable.
 - No `.gitignore` exists — build artifacts or local config could be accidentally committed.
 - CPU stat parsing relies on `/proc/stat` line order (`head -1`); unusual kernel configs could produce different column layouts.
 - Volume queries `@DEFAULT_AUDIO_SINK@` only — no microphone/input monitoring.

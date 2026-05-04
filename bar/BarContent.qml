@@ -35,7 +35,7 @@ RowLayout {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: Quickshell.execDetached(["quickshell", "--config", Quickshell.shellPath("../powermenu")])
+            onClicked: Quickshell.execDetached(["sh", "-c", "pgrep -f 'quickshell.*powermenu' | grep -v $$ > /dev/null || quickshell --config " + Quickshell.shellPath("../powermenu")])
         }
     }
 

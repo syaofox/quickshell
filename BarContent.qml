@@ -13,7 +13,7 @@ RowLayout {
 
     property int trayFontSize: 12
     property var nerdfontMap: ({
-        "nm-applet": "\uf1eb",
+        "nm-applet": "󰈀",
     })
 
     Item { width: 8 }
